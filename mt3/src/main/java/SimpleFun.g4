@@ -10,6 +10,7 @@ param: type ID;
 expr: IF expr 'then' expr 'else' expr
     | MATCH expr 'with' matchCases
     | expr OP expr
+    | expr CMP expr
     | ID
     | INT
     | STRING
@@ -33,7 +34,8 @@ terms: INT | BOOL | STRING;
 INVOKE: '^';
 IF: 'if';
 MATCH: 'match';
-OP: '+' | '-' | '*' | '/';
+OP: '+' | '-' | '*' | '/' | '%';
+CMP: '<=' | '>=' | '==' | '>' | '<';
 ID: [a-zA-Z_][a-zA-Z_0-9]*;
 INT: [0-9]+;
 BOOL: 'true' | 'false';

@@ -48,6 +48,12 @@ class SimpleFunVisitorToKotlin : SimpleFunBaseVisitor<String>() {
                 val params = visit(ctx.invokeParams())
                 "${ctx.ID().text}($params)"
             }
+            ctx.CMP() != null -> {
+                val left = visit(ctx.expr(0))
+                val right = visit(ctx.expr(1))
+                val op = ctx.CMP().text
+                "($left $op $right)"
+            }
             ctx.ID() != null -> ctx.ID().text
             ctx.INT() != null -> ctx.INT().text
             ctx.STRING() != null -> ctx.STRING().text
