@@ -2,10 +2,19 @@ grammar SimpleFun;
 
 program: functionDecl+;
 
-functionDecl: type ID '(' params? ')' '=' expr;
+functionDecl: type ID '(' params? ')' functionMatch;
 
 params: param (',' param)*;
 param: type ID;
+
+functionMatch: ('|' patterns)* functionDefault;
+
+patterns: pattern (',' pattern)* '->' expr;
+pattern: terms | EMPTY;
+
+EMPTY: '_';
+
+functionDefault: '=' expr;
 
 expr: IF expr 'then' expr 'else' expr
     | MATCH expr 'with' matchCases

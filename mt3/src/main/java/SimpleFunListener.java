@@ -47,6 +47,46 @@ public interface SimpleFunListener extends ParseTreeListener {
 	 */
 	void exitParam(SimpleFunParser.ParamContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link SimpleFunParser#functionMatch}.
+	 * @param ctx the parse tree
+	 */
+	void enterFunctionMatch(SimpleFunParser.FunctionMatchContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link SimpleFunParser#functionMatch}.
+	 * @param ctx the parse tree
+	 */
+	void exitFunctionMatch(SimpleFunParser.FunctionMatchContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link SimpleFunParser#patterns}.
+	 * @param ctx the parse tree
+	 */
+	void enterPatterns(SimpleFunParser.PatternsContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link SimpleFunParser#patterns}.
+	 * @param ctx the parse tree
+	 */
+	void exitPatterns(SimpleFunParser.PatternsContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link SimpleFunParser#pattern}.
+	 * @param ctx the parse tree
+	 */
+	void enterPattern(SimpleFunParser.PatternContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link SimpleFunParser#pattern}.
+	 * @param ctx the parse tree
+	 */
+	void exitPattern(SimpleFunParser.PatternContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link SimpleFunParser#functionDefault}.
+	 * @param ctx the parse tree
+	 */
+	void enterFunctionDefault(SimpleFunParser.FunctionDefaultContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link SimpleFunParser#functionDefault}.
+	 * @param ctx the parse tree
+	 */
+	void exitFunctionDefault(SimpleFunParser.FunctionDefaultContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link SimpleFunParser#expr}.
 	 * @param ctx the parse tree
 	 */

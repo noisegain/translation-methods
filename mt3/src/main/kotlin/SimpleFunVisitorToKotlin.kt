@@ -1,3 +1,4 @@
+import SimpleFunParser.ParamsContext
 import SimpleFunParser.TypeContext
 import org.antlr.v4.runtime.tree.ParseTree
 import org.antlr.v4.runtime.tree.TerminalNode
@@ -11,11 +12,31 @@ class SimpleFunVisitorToKotlin : SimpleFunBaseVisitor<String>() {
         val returnType = visit(ctx.type())
         val functionName = ctx.ID().text
         val parameters = ctx.params()?.let { visit(it) } ?: ""
-        val body = visit(ctx.expr())
-        return "fun $functionName($parameters): $returnType = $body"
+        return "fun $functionName($parameters): $returnType = ${functionMatch(ctx.params(), ctx.functionMatch())}"
     }
 
-    override fun visitParams(ctx: SimpleFunParser.ParamsContext): String {
+    private fun functionMatch(paramsContext: ParamsContext, ctx: SimpleFunParser.FunctionMatchContext): String {
+        if (ctx.patterns().isEmpty()) {
+            return visit(ctx.functionDefault())
+        } else {
+            val params = paramsContext.param().map { it.ID().text }
+            val cases = ctx.patterns().map { patternsContext ->
+                val patterns = patternsContext.pattern().zip(params).mapNotNull {
+                    if (it.first.EMPTY() == null) {
+                        it.first.terms().text + " == " + it.second
+                    } else null
+                }.joinToString(" && ")
+                patterns + " -> " + visit(patternsContext.expr())
+            }.joinToString("\n\t")
+            return "when {\n\t$cases\n\telse -> ${visit(ctx.functionDefault())}\n}"
+        }
+    }
+
+    override fun visitFunctionDefault(ctx: SimpleFunParser.FunctionDefaultContext): String {
+        return visit(ctx.expr())
+    }
+
+    override fun visitParams(ctx: ParamsContext): String {
         return ctx.param().joinToString(", ") { visit(it) }
     }
 
@@ -33,27 +54,32 @@ class SimpleFunVisitorToKotlin : SimpleFunBaseVisitor<String>() {
                 val op = ctx.OP().text
                 "($left $op $right)"
             }
+
             ctx.IF() != null -> {
                 val condition = visit(ctx.expr(0))
                 val thenBranch = visit(ctx.expr(1))
                 val elseBranch = visit(ctx.expr(2))
                 "if ($condition) $thenBranch else $elseBranch"
             }
+
             ctx.MATCH() != null -> {
                 val matchExpr = visit(ctx.expr(0))
                 val matchBody = visit(ctx.matchCases())
                 "when ($matchExpr) {\n$matchBody\n}"
             }
+
             ctx.INVOKE() != null -> {
                 val params = visit(ctx.invokeParams())
                 "${ctx.ID().text}($params)"
             }
+
             ctx.CMP() != null -> {
                 val left = visit(ctx.expr(0))
                 val right = visit(ctx.expr(1))
                 val op = ctx.CMP().text
                 "($left $op $right)"
             }
+
             ctx.ID() != null -> ctx.ID().text
             ctx.INT() != null -> ctx.INT().text
             ctx.STRING() != null -> ctx.STRING().text
@@ -83,7 +109,7 @@ class SimpleFunVisitorToKotlin : SimpleFunBaseVisitor<String>() {
         return "else -> $expr"
     }
 
-    private fun mapType(type: String) = when(type) {
+    private fun mapType(type: String) = when (type) {
         "Bool" -> "Boolean"
         else -> type
     }

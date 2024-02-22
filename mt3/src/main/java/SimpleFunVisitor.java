@@ -34,6 +34,30 @@ public interface SimpleFunVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitParam(SimpleFunParser.ParamContext ctx);
 	/**
+	 * Visit a parse tree produced by {@link SimpleFunParser#functionMatch}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitFunctionMatch(SimpleFunParser.FunctionMatchContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link SimpleFunParser#patterns}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitPatterns(SimpleFunParser.PatternsContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link SimpleFunParser#pattern}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitPattern(SimpleFunParser.PatternContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link SimpleFunParser#functionDefault}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitFunctionDefault(SimpleFunParser.FunctionDefaultContext ctx);
+	/**
 	 * Visit a parse tree produced by {@link SimpleFunParser#expr}.
 	 * @param ctx the parse tree
 	 * @return the visitor result

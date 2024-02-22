@@ -21,11 +21,11 @@ Bool helper(Int n, Int m) =
             else if n % m == 0 then false
             else helper^n, m + 1;
 
-Bool isPrime(Int n) =
-    if n <= 1 then false
-    else if n == 2 then true
-    else helper^n,2;
+Bool isPrime(Int n)
+    | 1 -> false
+    | 2 -> true
+    = helper^n,2;
 
-Int gcd(Int a, Int b) =
-    if b == 0 then a
-    else gcd^ b, a % b;
+Int gcd(Int a, Int b)
+    | _, 0 -> a
+    = gcd^ b, a % b;
